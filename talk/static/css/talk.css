@@ -1,0 +1,319 @@
+/*
+Based on 12 col responsive.gs by Denis LeBlanc
+Licensed under GPL & MIT
+*/
+.three,
+.four,
+.six,
+.eight,
+.nine,
+.twelve,
+.row {
+    box-sizing: border-box;
+}
+.row:after,
+.columns:after,
+.clear:after,
+.group:after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.columns {
+    display: block;
+    float: left;
+    width: 100%;
+}
+.columns:first-child {
+    margin-left: 0;
+}
+@media(min-width: 801px) {
+    .columns {
+        margin-left: 3%
+    }
+    .three {
+        width: 22%
+    }
+    .four {
+        width: 30.3333333333%
+    }
+    .six {
+        width: 47%
+    }
+    .eight {
+        width: 63.6666666667%
+    }
+    .nine {
+        width: 72%
+    }
+    .twelve {
+        width: 100%
+    }
+}
+@media(min-width: 641px){
+    .six.columns {
+        margin-left: 3%;
+        width: 47%;
+    }
+    .columns:first-child{
+        margin-left: 0;
+    }
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+#talk {
+    color: #333;
+}
+
+#talk a {
+    text-decoration: none;
+}
+
+#talk p,
+#talk ul,
+#talk ol,
+#talk pre {
+    margin: 0 0 1.25rem;
+}
+
+#talk ul,
+#talk ol {
+    padding: 0 0 0 1.25rem;
+}
+
+#talk h1,
+#talk h2,
+#talk h3,
+#talk h4,
+#talk h5,
+#talk h6 {
+    margin: 0 0 .25rem;
+}
+
+#talk input[type=text],
+#talk input[type=search],
+#talk textarea,
+#talk select {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-sizing: border-box;
+    color: #444;
+    font-size: 1em;
+    height: auto;
+    padding: 6px;
+    resize: none;
+    width: 100%;
+}
+
+#talk input[type=submit] {
+    margin-top: .5rem;
+}
+
+#talk label {
+    display: block;
+}
+
+#talk .button {
+    padding: 6px 12px;
+    height: auto;
+    color: white;
+    background: #999;
+    border: 1px solid #888;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+#talk .button:hover {
+    background: #888;
+    text-decoration: none;
+}
+
+#talk,
+#talk textarea {
+    font-family: Arial, sans-serif;
+}
+
+#talk textarea {
+    font-size: initial;
+}
+
+#talk time {
+    font-size: .875em;
+}
+
+#talk .meta,
+#talk .actions {
+    font-size: .875em;
+    vertical-align: top;
+}
+
+#talk .avatar {
+    float: left;
+    margin: 0 1em .5em 0;
+    border-radius: 2px;
+    width: 50px;
+    height: 50px;
+}
+
+#talk .small.avatar {
+    margin: 0 .5em .5em 0;
+    width: 20px;
+    height: 20px;
+}
+
+.threads a {
+    color: inherit;
+}
+
+.threads a:hover {
+    text-decoration: none;
+}
+
+.threads form input {
+    width: 100%;
+    margin-bottom: .75em;
+}
+
+.threads .reply {
+    height: 12px;
+    width: 12px;
+}
+
+.thread {
+    border-bottom: 1px solid #ddd;
+    padding: .5em 0;
+    overflow: hidden;
+}
+
+.threads a:first-child .thread {
+    border-top: 1px solid #ddd;
+}
+
+.thread .excerpt {
+    clear: both;
+}
+
+.thread .excerpt .meta {
+    color: #777;
+}
+
+.thread:hover {
+    background: #eee;
+}
+
+.reply {
+    margin: 0 5px 0 0;
+}
+
+#talk .paginator .prev,
+#talk .paginator .next {
+    margin: 0;
+}
+
+.label {
+    padding: 0.2em 0.5em;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.85em;
+    border-radius: 2px;
+}
+
+.thread .label {
+    font-size: .75em;
+    margin-left: .5em;
+    padding: 0 .5em;
+}
+
+.newthread {
+    margin: 0;
+}
+
+.threadmeta {
+    margin-bottom: 1.15em;
+}
+
+#talk .threadmeta h3 {
+    margin: .3em 0;
+}
+
+.newdate {
+    font-size: .875em;
+    text-align: center;
+    border-top: 1px solid #ccc;
+}
+
+.newdate time {
+    position: relative;
+    background: #fff;
+    padding: 0 .5em;
+    top: -.75em;
+}
+
+.new {
+    background: #D5533A;
+    color: #fff;
+}
+
+.indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.inchat {
+    background: #81D462;
+}
+
+.idle {
+    background: #FF9F3F;
+}
+
+.away {
+    background: #D5533A;
+}
+
+.message .body {
+    margin: .5em 0 .5em 64px;
+}
+
+.newmessage,
+.newthread {
+    margin-left: 64px;
+}
+
+#settings {
+    display: none;
+    position: relative;
+}
+
+#settings form {
+    position: absolute;
+    top: 1.5em;
+    right: 0;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    font-size: .875em;
+    padding: .5em;
+    width: 100%;
+}
+
+.setting {
+    transition: all 500ms;
+}
+
+.saved {
+    color: #81D462;
+}

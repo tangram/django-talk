@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load staticfiles %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/autocomplete.css' %}">
+<link rel="stylesheet" href="{% static 'css/talk.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="talk">
+    <div class="row">
+        <div class="eight columns">
+            <h2>{% trans 'Talk' %}</h2>
+        </div>
+        <div class="four columns">
+            <a class="togglesettings right" href="#" title="{% trans 'Change your settings' %}">{% trans 'Settings' %}</a>
+            <div id="settings">
+                <form action="{% url 'talk_settings' %}" method="post">{% csrf_token %}
+                    <label class="setting">
+                        <input type="checkbox" name="notifications" {% if user.talk_settings.email_notifications %}checked{% endif %} value="{{ user.talk_settings.email_notifications }}">
+                        {% trans 'Receive e-mail notifications when not online' %}
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                    </label>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="three columns threads">
+            <form class="threadsearch" action="{% url 'talk_thread_search' %}" method="get">
+                <input type="search" name="query" placeholder="{% trans 'Search conversations...' %}"{% if query %} value="{{ query }}"{% endif %} autocomplete="off">
+            </form>
+            <div id="threads">
+                {% include 'talk/threads.html' %}
+            </div>
+        </div>
+        <div class="nine columns">
+            <a class="button right newthread" href="{% url 'new_thread' %}">{% trans 'New conversation' %}</a>
+
+            <div id="thread">
+                {% if thread %}
+                <div class="threadmeta">
+                    <h3>{% trans 'Conversation with' %}
+                    {% for user in thread.others %}
+                    <a href="{{ user.get_absolute_url }}">{{ user.username }}</a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                    </h3>
+                </div>
+                <div id="messages">
+                    {% include 'talk/messages.html' %}
+                </div>
+                {% include 'talk/message_form.html' %}
+                {% endif %}
+
+                {% if new %}
+                <div class="threadmeta">
+                    <h3>{% trans 'New conversation' %}</h3>
+                </div>
+                {% include 'talk/thread_form.html' %}
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.autosize.min.js' %}"></script>
+<script src="{% static 'js/marked.js' %}"></script>
+<script src="{% static 'js/talk.js' %}"></script>
+<script>
+    var states = {
+        'inchat': '{% trans 'In chat' %}',
+        'idle': '{% trans 'Idle' %}',
+        'away': '{% trans 'Away' %}',
+    }
+</script>
+{% include 'autocomplete_light/static.html' %}
+{% endblock %}

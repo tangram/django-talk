@@ -1,0 +1,44 @@
+{% load i18n %}
+{% load staticfiles %}
+
+{% for thread in threads %}
+<a class="threadload" href="{% url 'view_thread' thread.id %}">
+    <div class="thread clear">
+        <span class="meta">
+            <time class="right">{{ thread.updated_at|date:'d.m.y' }}</time>
+            {% for user in thread.others %}
+            <img class="left small avatar" src="{{ user.get_avatar_url }}" title="{{ user.username }}" >
+            {% endfor %}
+            {% if thread.others|length > 1 %}
+            <br>
+            {% endif %}
+            {% for user in thread.others %}
+            {{ user.username }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </span>
+        <div class="excerpt">
+            {% if thread.new_count %}
+            <span class="label new right">{{ thread.new_count }}</span>
+            {% endif %}
+            {% if thread.last_message_author == user %}
+            <img class="reply" src="{% static 'img/reply.png' %}" alt="{% trans 'Your reply' %}" title="{% trans 'Your reply' %}">
+            {% elif thread.others|length > 2 %}
+            <span class="meta">{{ thread.last_message_author }}:</span>
+            {% endif %}
+            {{ thread.last_message_excerpt }}
+        </div>
+    </div>
+</a>
+{% empty %}
+{% trans 'No conversations found' %}
+{% endfor %}
+
+<div class="paginator" data-url="{% url 'talk_thread_search' %}">
+    {% if threads.has_previous %}
+    <span class="prev left"><a href="{{ threads.query }}{{ threads.previous_page_number }}">{% trans 'previous' %}</a></span>
+    {% endif %}
+
+    {% if threads.has_next %}
+    <span class="next right"><a href="{{ threads.query }}{{ threads.next_page_number }}">{% trans 'next' %}</a></span>
+    {% endif %}
+</div>

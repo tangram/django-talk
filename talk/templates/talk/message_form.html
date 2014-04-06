@@ -1,0 +1,19 @@
+{% load i18n %}
+{% if user.is_authenticated %}
+<span class="meta">
+    <img class="left avatar" src="{{ user.get_avatar_url }}">
+</span>
+<form class="newmessage" action="{% url 'view_thread' thread.id %}" method="post">{% csrf_token %}
+    {% for field in form %}
+    <div{% if field.field.required %} class="required"{% endif %}>
+        {% for error in field.errors %}
+        <span class="meta">{{ error|escape }}</span>
+        {% endfor %}
+        {{ field }}
+    </div>
+    {% endfor %}
+    <input class="button" type="submit" value="{% trans 'Post message' %}" />
+</form>
+{% else %}
+<p><a class="button" href="{% url 'login' %}">{% trans 'Log in' %}</a> {% trans 'to post a message.' %}</p>
+{% endif %}

@@ -1,0 +1,91 @@
+.yourlabs-autocomplete {
+    position: absolute;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 10em;
+    padding: 0;
+    margin: 1px 0 0;
+    list-style: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.yourlabs-autocomplete .hilight {
+    color: #fff;
+    text-decoration: none;
+    background: #eee;
+    outline: 0;
+}
+
+.yourlabs-autocomplete .choice,
+.yourlabs-autocomplete [data-value],
+.yourlabs-autocomplete em {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    color: #444;
+    white-space: nowrap;
+    color: black;
+    cursor: pointer;
+}
+
+.block,
+.div
+{
+    display: block;
+}
+
+.autocomplete-light-widget {
+    display: inline-block;
+    position: relative;
+}
+
+.autocomplete-light-widget input,
+.autocomplete-light-widget input:focus {
+    margin: 0;
+    outline: 0;
+    width: 230px;
+}
+
+input.autocomplete {
+    position: relative;
+    vertical-align: top;
+}
+
+input.autocomplete.xhr-pending {
+    background-image: url('xhr-pending.gif');
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.autocomplete-light-widget.modern-style {
+    border: 1px solid lightgrey;
+    padding: 4px 4px 3px 4px;
+}
+
+.autocomplete-light-widget.yourlabs-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+}
+
+.yourlabs-autocomplete .choice-detail,
+.yourlabs-autocomplete .choice-update
+{
+    display: none;
+}
+
+/* credit: http://www.csslab.cl/2008/01/30/ventana-modal-solo-con-css/ */
+#yourlabs_overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 1001;
+}

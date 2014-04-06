@@ -1,0 +1,51 @@
+{% load i18n %}
+{% load markdown %}
+
+{% for message in index %}
+
+{% if thread and forloop.first and not message.nextday %}
+<div class="newdate">
+    <time>{{ message.message.created_at|date:'j. F Y' }}</time>
+</div>
+{% endif %}
+
+{% if message.nextday %}
+<div class="newdate">
+    <time>{{ message.message.created_at|date:'j. F Y' }}</time>
+</div>
+{% endif %}
+
+<a class="anchor" name="{{ message.message.id }}"></a>
+<div class="message clear">
+    <span class="meta">
+        <div class="date right">
+            {% if message.message.author == user %}<div title="{% trans 'Seen' %}"></div>
+            {% elif message.new %}<span class="label new">{% trans 'New' %}</span>{% endif %}
+            <time>{{ message.message.created_at|date:'H:i' }}</time>
+        </div>
+        <a href="{{ message.message.author.get_absolute_url }}">
+            <img class="avatar" src="{{ message.message.author.get_avatar_url }}" title="{{ message.message.author.username }}">
+        </a>
+        <a href="{{ message.message.author.get_absolute_url }}">
+            {{ message.message.author.username }}
+        </a>
+        {% if message.message.author != user %}
+        <div class="user{{ message.message.author.id }} indicator
+        {% if message.user_in_chat %}inchat" title="{% trans 'In chat' %}
+        {% elif message.user_online %}idle" title="{% trans 'Idle' %}
+        {% else %}away" title="{% trans 'Away' %}{% endif %}">
+        </div>
+        {% endif %}
+    </span>
+    <div class="body">
+        {{ message.message.body|markdown }}
+    </div>
+</div>
+{% endfor %}
+<script class="userStates">
+    var userStates = {
+        {% for key, value in user_states.items %}
+        '.user{{ key }}': '{{ value }}',
+        {% endfor %}
+    }
+</script>

@@ -1,0 +1,10 @@
+{% load i18n %}{% blocktrans %}Hi {{ subject }}.
+
+You have received a new private message from {{ author }} at {{ site_name }}.
+
+Go to {{ message_url }} to view the message.
+
+----
+
+You can turn off these notifications at any time from the settings at the address above.
+{% endblocktrans %}

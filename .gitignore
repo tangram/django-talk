@@ -1,0 +1,23 @@
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Mac
+.DS_Store
+__MACOSX
+
+# Python
+*.py[co]
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+pip-log.txt
+local
