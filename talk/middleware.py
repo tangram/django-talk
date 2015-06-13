@@ -5,7 +5,7 @@ from django.utils import timezone
 class UserLastseenMiddleware:
     def process_request(self, request):
         if request.user.is_authenticated():
-            now = timezone.now()
+            now = timezone.localtime(timezone.now())
             cache.set(
                 'lastseen_%i' % request.user.id,
                 now,

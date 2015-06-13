@@ -48,7 +48,7 @@ def get_threads(request):
 @login_required
 def view_thread(request, thread_id=None):
     cache.set('in_chat_%s' % request.user.id,
-        timezone.now(),
+        timezone.localtime(timezone.now()),
         getattr(django_settings, 'USER_IN_CHAT_TIMEOUT', 20)
     )
 
@@ -79,7 +79,7 @@ def view_thread(request, thread_id=None):
             message.save()
             for user in thread.users.distinct():
                 index = MessageIndex(message=message, thread=thread, user=user)
-                index.save()
+                index.save(request=request)
     else:
         form = MessageForm()
 
@@ -120,7 +120,7 @@ def view_thread(request, thread_id=None):
 @login_required
 def new_thread(request):
     cache.set('in_chat_%s' % request.user.id,
-        timezone.now(),
+        timezone.localtime(timezone.now()),
         getattr(django_settings, 'USER_IN_CHAT_TIMEOUT', 20)
     )
 
@@ -148,11 +148,11 @@ def new_thread(request):
             for user in list(set(users)):
                 index = MessageIndex(message=message, thread=thread, user=user)
                 index.new = (user != request.user)
-                index.save()
+                index.save(request=request)
 
             return redirect('view_thread', thread_id=thread.id)
     else:
-        form = ThreadForm()
+        form = ThreadForm(initial={'recipients': request.GET.get('recipients')})
 
     context = {
         'threads': get_page(request, get_threads(request)),

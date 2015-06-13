@@ -4,8 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import get_current_site
 from django.core.cache import cache
-from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -23,7 +23,7 @@ autocomplete_light.register(UserAutocomplete)
 class Message(models.Model):
     author = models.ForeignKey(get_user_model(), editable=False, related_name='talk_message')
     body = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=lambda:timezone.localtime(timezone.now()), editable=False)
 
     class Meta:
         ordering = ['created_at']
@@ -37,7 +37,7 @@ class Message(models.Model):
 class Thread(models.Model):
     users = models.ManyToManyField(get_user_model(), through='MessageIndex', related_name='talk_thread')
     messages = models.ManyToManyField(Message, through='MessageIndex')
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(default=lambda:timezone.localtime(timezone.now()), editable=False)
 
     class Meta:
         ordering = ['updated_at']
@@ -91,7 +91,7 @@ class MessageIndex(models.Model):
     user = models.ForeignKey(get_user_model(), related_name='talk_messageindex')
     new = models.BooleanField(default=True)
     next_day = models.BooleanField(default=False)
-    created_at = models.DateTimeField(default=timezone.now, editable=False)
+    created_at = models.DateTimeField(default=lambda:timezone.localtime(timezone.now()), editable=False)
 
     objects = MessageIndexManager()
 
@@ -101,8 +101,6 @@ class MessageIndex(models.Model):
         verbose_name_plural = _('message indices')
 
     def save(self, *args, **kwargs):
-        self.created_at = timezone.now()
-
         try:
             message = self.thread.messages.latest('created_at')
             if message:
@@ -110,6 +108,7 @@ class MessageIndex(models.Model):
         except:
             pass
 
+        request = kwargs.pop('request')
         super(MessageIndex, self).save(*args, **kwargs)
         Thread.objects.filter(id=self.thread.id).update(updated_at=self.created_at)
 
@@ -122,8 +121,10 @@ class MessageIndex(models.Model):
                 notify_user = False
 
             if notify_user:
-                site = Site.objects.get_current()
-                domain = site.domain if site.domain[-1] != '/' else site.domain[:-1]
+                current_site = get_current_site(request)
+                site_name = current_site.name
+                domain = current_site.domain
+
                 context = {
                     'author': self.message.author,
                     'subject': self.user,
@@ -132,7 +133,7 @@ class MessageIndex(models.Model):
                         self.thread.get_absolute_url(),
                         self.message.id
                     ),
-                    'site_name': site,
+                    'site_name': site_name,
                 }
                 message = render_to_string('talk/email_notification.txt', context)
                 send_mail(
@@ -145,10 +146,10 @@ class MessageIndex(models.Model):
                 )
 
     def user_online(self):
-        return cache.get('lastseen_%i' % self.message.author.id, None)
+        return cache.get('lastseen_%i' % self.user.id, None)
 
     def user_in_chat(self):
-        return cache.get('in_chat_%i' % self.message.author.id, None)
+        return cache.get('in_chat_%i' % self.user.id, None)
 
 
 class Settings(models.Model):
